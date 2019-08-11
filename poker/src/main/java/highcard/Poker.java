@@ -43,14 +43,11 @@ public class Poker {
             result = compareCardList(cardsValue1,cardsValue2);
             if(result!=null) return result;
         }
-        if(getThreePair(cardMap1)!= -1 && getThreePair(cardMap2)!= -1)
+
+        if(cardMap1.size() == cardMap2.size()&& getThreePair(cardMap1)!= -1 && getThreePair(cardMap2)!= -1)
         {
             result = compareThreePair(cardMap1, cardMap2);
             if(result!=null) return result;
-            Integer threePair = getThreePair(cardMap1);
-            cardsValue1 =  cardsValue1.stream().filter(card->card != threePair).collect(Collectors.toList());
-            cardsValue2 =  cardsValue2.stream().filter(card->card != threePair).collect(Collectors.toList());
-            return compareCardIntegerList(cardsValue1,cardsValue2,cardSize-3);
         }
 
         if(cardMap1.size() == cardMap2.size() && cardMap1.size() == cardSize-2 &&(getThreePair(cardMap1)!= -1 ||getThreePair(cardMap2)!= -1)){
