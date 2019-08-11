@@ -84,6 +84,16 @@ public class CardTest {
         //then
         Assert.assertEquals("winner1", result);
     }
-    
+    @Test
+    public void should_return_winner2_when_have_two_same_pair(){
+        //given
+        Poker poker = new Poker();
+        List<Card> cards1 = Arrays.asList(new Card("QC"), new Card("QH"), new Card("3H"), new Card("7H"), new Card("7C"));
+        List<Card> cards2 = Arrays.asList(new Card("2D"), new Card("QD"), new Card("QS"), new Card("7S"), new Card("7D"));
+        //when
+        String result = poker.compare(cards1, cards2);
+        //then
+        Assert.assertEquals("winner1", result);
+    }
 
 }
