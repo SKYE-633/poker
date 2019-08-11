@@ -25,16 +25,66 @@ public class Poker {
         String result = null;
         List<Integer> cardsValue1 = sortCard(cards1);
         List<Integer> cardsValue2 = sortCard(cards2);
+        return compareCardIntegerList(cardsValue1, cardsValue2, 5);
+    }
 
-        Set<Integer> set1 = new HashSet<>(cardsValue1);
-        Set<Integer> set2 = new HashSet<>(cardsValue2);
+    private String compareCardIntegerList(List<Integer> cardsValue1, List<Integer> cardsValue2, int cardSize) {
+        String result = null;
+        if (cardSize == 0) {
+            return "draw";
+        }
 
-        result = checkPair(set1, set2);
-        if (result != null) return result;
+        Map<Integer, Integer> cardMap1 = changeToMap(cardsValue1);
+        Map<Integer, Integer> cardMap2 = changeToMap(cardsValue2);
 
-        result = compareCardList(cardsValue1, cardsValue2);
-        if (result != null) return result;
+        if (cardMap1.size() == cardMap2.size() && cardMap1.size() == 4) {
+            result = comparePair(cardMap1, cardMap2);
+            if (result != null) return result;
+            Integer pair = getPairKey(cardMap1);
+            cardsValue1 = cardsValue1.stream().filter(card -> card != pair).collect(Collectors.toList());
+            cardsValue2 = cardsValue2.stream().filter(card -> card != pair).collect(Collectors.toList());
+            compareCardIntegerList(cardsValue1, cardsValue2, 3);
+        }
+        if (cardMap1.size() < cardMap2.size()) {
+            return "winner1";
+        }
+        if (cardMap2.size() < cardMap1.size()) {
+            return "winner2";
+        }
         return "draw";
+    }
+
+    private String comparePair(Map<Integer, Integer> pairMap1, Map<Integer, Integer> pairMap2) {
+        Integer pair1 = 0;
+        Integer pair2 = 0;
+        pair1 = getPairKey(pairMap1);
+        pair2 = getPairKey(pairMap2);
+        if(pair1 > pair2) return "winner1";
+        if(pair1 < pair2) return  "winner2";
+        return null;
+    }
+
+    private Integer getPairKey(Map<Integer, Integer> pairMap) {
+        Integer pair1 = null;
+        for (Integer key : pairMap.keySet()) {
+            if (pairMap.get(key) == 2) {
+                pair1 = key;
+                break;
+            }
+        }
+        return pair1;
+    }
+    public Map<Integer,Integer> changeToMap(List<Integer> cardList) {
+
+        Map<Integer,Integer> pairMap = new HashMap<>();
+        for(Integer integer : cardList){
+            if(pairMap.containsKey(integer)){
+                pairMap.put(integer,pairMap.get(integer)+1);
+            }else {
+                pairMap.put(integer, 1);
+            }
+        }
+        return pairMap;
     }
 
     private String compareCardList(List<Integer> cardsValue1, List<Integer> cardsValue2) {
@@ -47,17 +97,6 @@ public class Poker {
         }
         return null;
     }
-
-    private String checkPair(Set<Integer> set1, Set<Integer> set2) {
-        if(set1.size() < set2.size()){
-            return "winner1";
-        }
-        if(set2.size() < set1.size()){
-            return "winner2";
-        }
-        return null;
-    }
-
 
     public String compareCard(Integer value1, Integer value2){
         if(value1 > value2){
