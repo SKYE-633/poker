@@ -44,12 +44,22 @@ public class Poker {
             if(result!=null) return result;
         }
 
+        if(cardMap1.size() == cardMap2.size() && cardMap1.size()== cardSize-3&&getFourPair(cardMap1)!= -1&&getFourPair(cardMap2)!=-1){
+            result = compareFourPair(cardMap1, cardMap2);
+            if(result!=null) return result;
+        }
+        if(cardMap1.size() == cardMap2.size() && cardMap1.size()== cardSize-3&&(getFourPair(cardMap1)!= -1||getFourPair(cardMap2)!= -1)){
+            if(getFourPair(cardMap1)!= -1){
+                return "winner1";
+            }
+            return "winner2";
+        }
+
         if(cardMap1.size() == cardMap2.size()&& getThreePair(cardMap1)!= -1 && getThreePair(cardMap2)!= -1)
         {
             result = compareThreePair(cardMap1, cardMap2);
             if(result!=null) return result;
         }
-
         if(cardMap1.size() == cardMap2.size() && cardMap1.size() == cardSize-2 &&(getThreePair(cardMap1)!= -1 ||getThreePair(cardMap2)!= -1)){
             if(getThreePair(cardMap1)!= -1){
                 return "winner1";
@@ -90,7 +100,24 @@ public class Poker {
         }
         return -1;
     }
+    private String compareFourPair(Map<Integer, Integer> cardMap1, Map<Integer, Integer> cardMap2) {
+        if(getFourPair(cardMap1)>getFourPair(cardMap2)){
+            return "winner1";
+        }
+        if(getFourPair(cardMap1)<getFourPair(cardMap2)){
+            return "winner2";
+        }
+        return null;
+    }
 
+    private Integer getFourPair(Map<Integer, Integer> cardMap) {
+        for (Integer key : cardMap.keySet()) {
+            if (cardMap.get(key) == 4) {
+                return key;
+            }
+        }
+        return -1;
+    }
     private String comparePair(Map<Integer, Integer> pairMap1, Map<Integer, Integer> pairMap2) {
         Integer pair1 = 0;
         Integer pair2 = 0;
