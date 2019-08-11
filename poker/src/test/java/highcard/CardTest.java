@@ -63,7 +63,7 @@ public class CardTest {
         Assert.assertEquals("winner2", result);
     }
     @Test
-    public void should_return_winner2_when_one_have_two_pair_and_the_other_have_one() {
+    public void should_return_winner2_when_one_have_two_pair_and_the_other_have_one(){
         //given
         Poker poker = new Poker();
         List<Card> cards1 = Arrays.asList(new Card("QC"), new Card("3C"), new Card("3H"), new Card("5H"), new Card("8C"));
@@ -73,5 +73,17 @@ public class CardTest {
         //then
         Assert.assertEquals("winner2", result);
     }
+    @Test
+    public void should_return_winner2_when_both_have_two_pair() {
+        //given
+        Poker poker = new Poker();
+        List<Card> cards1 = Arrays.asList(new Card("QC"), new Card("QH"), new Card("3H"), new Card("7H"), new Card("7C"));
+        List<Card> cards2 = Arrays.asList(new Card("2D"), new Card("QD"), new Card("QS"), new Card("5S"), new Card("5D"));
+        //when
+        String result = poker.compare(cards1, cards2);
+        //then
+        Assert.assertEquals("winner1", result);
+    }
+    
 
 }
