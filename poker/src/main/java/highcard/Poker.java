@@ -33,17 +33,25 @@ public class Poker {
         if (cardSize == 0) {
             return "draw";
         }
+        if (cardSize == 1) {
+            result = compareCard(cardsValue1.get(0),cardsValue2.get(0));
+            return result;
+        }
 
         Map<Integer, Integer> cardMap1 = changeToMap(cardsValue1);
         Map<Integer, Integer> cardMap2 = changeToMap(cardsValue2);
 
+        if(cardMap1.size() == cardMap1.size()&& cardMap1.size() == 5){
+            result = compareCardList(cardsValue1,cardsValue2);
+            if(result!=null) return result;
+        }
         if (cardMap1.size() == cardMap2.size() && cardMap1.size() == 4) {
             result = comparePair(cardMap1, cardMap2);
             if (result != null) return result;
             Integer pair = getPairKey(cardMap1);
             cardsValue1 = cardsValue1.stream().filter(card -> card != pair).collect(Collectors.toList());
             cardsValue2 = cardsValue2.stream().filter(card -> card != pair).collect(Collectors.toList());
-            compareCardIntegerList(cardsValue1, cardsValue2, 3);
+            return compareCardIntegerList(cardsValue1, cardsValue2, 3);
         }
         if (cardMap1.size() < cardMap2.size()) {
             return "winner1";
