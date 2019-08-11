@@ -43,8 +43,18 @@ public class Poker {
             result = compareCardList(cardsValue1,cardsValue2);
             if(result!=null) return result;
         }
-        if(cardMap1.size() == cardMap2.size() && cardMap1.size() == cardSize-2 &&(checkThreePair(cardMap1)||checkThreePair(cardMap2))){
-            if(checkThreePair(cardMap1)){
+        if(getThreePair(cardMap1)!= -1 && getThreePair(cardMap2)!= -1)
+        {
+            result = compareThreePair(cardMap1, cardMap2);
+            if(result!=null) return result;
+            Integer threePair = getThreePair(cardMap1);
+            cardsValue1 =  cardsValue1.stream().filter(card->card != threePair).collect(Collectors.toList());
+            cardsValue2 =  cardsValue2.stream().filter(card->card != threePair).collect(Collectors.toList());
+            return compareCardIntegerList(cardsValue1,cardsValue2,cardSize-3);
+        }
+
+        if(cardMap1.size() == cardMap2.size() && cardMap1.size() == cardSize-2 &&(getThreePair(cardMap1)!= -1 ||getThreePair(cardMap2)!= -1)){
+            if(getThreePair(cardMap1)!= -1){
                 return "winner1";
             }
             return "winner2";
@@ -66,13 +76,22 @@ public class Poker {
         return "draw";
     }
 
-    private boolean checkThreePair(Map<Integer,Integer> cardMap) {
+    public String compareThreePair(Map<Integer, Integer> cardMap1, Map<Integer, Integer> cardMap2) {
+        if(getThreePair(cardMap1)>getThreePair(cardMap2)){
+            return "winner1";
+        }
+        if(getThreePair(cardMap1)<getThreePair(cardMap2)){
+            return "winner2";
+        }
+        return null;
+    }
+    private Integer getThreePair(Map<Integer, Integer> cardMap) {
         for (Integer key : cardMap.keySet()) {
             if (cardMap.get(key) == 3) {
-                return true;
+                return key;
             }
         }
-        return false;
+        return -1;
     }
 
     private String comparePair(Map<Integer, Integer> pairMap1, Map<Integer, Integer> pairMap2) {
